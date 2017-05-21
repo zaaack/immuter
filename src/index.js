@@ -4,7 +4,7 @@ import {
   defaults as withDefaults
 } from 'lodash'
 import { set as _fpSet, update as _fpUpdate } from 'lodash/fp'
-import castPath from 'lodash/_castPath'
+import toPath from 'lodash/toPath'
 
 type Path = string | Array<string>
 type GetPath = Path | { [string]: Path }
@@ -61,7 +61,7 @@ function del<T: Object>(obj: T, path: DelPath): T {
       return isDel ? del(newObj, subPath) : newObj
     }, obj)
   }
-  const pathArray: Array<string> = castPath(path, obj)
+  const pathArray: Array<string> = toPath(path, obj)
   const last = pathArray[pathArray.length - 1]
   const parentPath = pathArray.slice(0, -1)
   if (parentPath.length === 0) {
