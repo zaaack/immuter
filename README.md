@@ -47,7 +47,7 @@ titleEn = Immuter.get(book, 'title.en')
 titleEn = Immuter.get(book, ['title', 'en'])
 // return: Harry Potter and the Philosopher\'s Stone
 
-// multiple
+// multiple get
 bookLite = Immuter.get(book, {
   'title': 'title.en',
   'author': 'author',
@@ -63,7 +63,7 @@ bookLite = Immuter.get(book, {
 // set the English title
 newBook = Immuter.set(newBook, 'title.zh', '新标题!')
 // or
-newBook = Immuter.get(newBook, ['title', 'en'], 'New title!')
+newBook = Immuter.set(newBook, ['title', 'en'], 'New title!')
 // return:  {
 //   title: {
 //     zh: '新标题!',
@@ -72,6 +72,7 @@ newBook = Immuter.get(newBook, ['title', 'en'], 'New title!')
 //   author: 'J. k. rowling',
 //   tags: ['novel', 'magic'],
 // }
+
 
 // set array item
 newBook = Immuter.set(newBook, 'tags[0]', 'New tag')
@@ -88,6 +89,27 @@ newBook = Immuter.update(book, 'tags', tags => tags.concat(['UK']))
 //   tags: ['New tag', 'magic', 'UK'],
 // }
 
+
+// multiple set
+newBook = Immuter.set(newBook, {
+  'title.en': 'New Title!',
+  'author': 'New Author!'
+})
+
+
+// multiple update
+newBook = Immuter.update(newBook, {
+  'title.en': title => title + ' (Original Edition)',
+  'author': author => author.toUpperCase(),
+  'tags': tags => tags.concat(['UK']),
+})
+
+// multiple delete
+newBook = Immuter.delete(newBook, {
+  'title.zh': true, // this would be removed
+  'author': false, // this won't
+  'tags': false, // this won't, too
+})
 ```
 
 ### Advance
@@ -190,7 +212,7 @@ This function will return an ImmuterWrapper instance with all functions above as
 
 This function will bind immuter functions to React Component instance, you can get, set, delete or update component state directly with instance method `get`, `set`, `delete` or `update`.
 
-* ns: whether using namespace, defaults is false, means immuter functions would mount on component instance, you can call `this.get('title.en')`, `this.set('title.en', 'Some title')`, etc. in your component. Or using an special object to mount, e.g ns='immter', so you should call like this: `this.get('title.en')`, `this.set('title.en', 'Some title')`
+* ns: Whether using namespace, defaults is false, means immuter functions would mount on component instance, you can call `this.get('title.en')`, `this.set('title.en', 'Some title')`, etc. in your component. Or using an special object to mount, e.g ns='immter', so you should call like this: `this.get('title.en')`, `this.set('title.en', 'Some title')`
 * includes: An array of include methods, defaults is all.
 * excludes: An array of exclude methods, defaults is ['bindObj', 'bindComp'].
 
@@ -204,4 +226,4 @@ export type ImmuterUpdate = <State>(path: UpdatePath, fn?: Updater) => State
 export type ImmuterDel = <State>(path: DelPath) => State
 ```
 
-## MIT Licence
+## Licence MIT 
