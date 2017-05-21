@@ -1,0 +1,17 @@
+{
+  "presets": [
+    "latest",
+    "stage-0"
+  ],
+	"plugins": [
+    "transform-flow-strip-types",
+		"transform-decorators-legacy",
+    "transform-class-properties",
+    "transform-runtime",
+    "lodash",
+    ["module-resolver", {
+     "root": ["./src"],
+     "alias": { }
+   }]
+	]
+}

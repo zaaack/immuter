@@ -1,0 +1,81 @@
+{
+  "name": "immuter",
+  "version": "1.0.0",
+  "description": "An immutable react/redux state update helper, easily handle nested state with less code.",
+  "main": "lib/index.js",
+  "module": "src/index.js",
+  "jsnext:main": "src/index.js",
+  "scripts": {
+    "build": "npm run build:lib && npm run build:flow",
+    "build:lib": "cross-env NODE_ENV=production babel -d ./lib -s false -D ./src && git add -A",
+    "build:flow": "flow-copy-source -v -i '{**/test/*.js,**/*.test.js}' src lib",
+    "flow": "flow check",
+    "lint": "eslint src",
+    "test": "cross-env NODE_ENV=development ava",
+    "cover": "cross-env NODE_ENV=development nyc ava"
+  },
+  "engines": {
+    "node": ">=4.0.0"
+  },
+  "pre-commit": [
+    "build"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/zaaack/immuter.git"
+  },
+  "keywords": [
+    "state-less",
+    "immutable",
+    "dot-prop",
+    "object-path",
+    "react",
+    "redux"
+  ],
+  "author": "zaaack",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/zaaack/immuter/issues"
+  },
+  "homepage": "https://github.com/zaaack/immuter#readme",
+  "devDependencies": {
+    "ava": "^0.19.1",
+    "babel-cli": "^6.24.1",
+    "babel-eslint": "^7.2.3",
+    "babel-plugin-lodash": "^3.2.11",
+    "babel-plugin-module-resolver": "^2.7.0",
+    "babel-plugin-transform-class-properties": "^6.24.1",
+    "babel-plugin-transform-decorators-legacy": "^1.3.4",
+    "babel-plugin-transform-flow-strip-types": "^6.22.0",
+    "babel-plugin-transform-runtime": "^6.23.0",
+    "babel-polyfill": "^6.23.0",
+    "babel-preset-latest": "^6.24.1",
+    "babel-preset-stage-0": "^6.24.1",
+    "cross-env": "^4.0.0",
+    "eslint": "^3.19.0",
+    "eslint-config-standard": "^10.2.1",
+    "eslint-import-resolver-babel-module": "^3.0.0",
+    "eslint-plugin-flowtype": "^2.32.1",
+    "eslint-plugin-import": "^2.2.0",
+    "eslint-plugin-node": "^4.2.2",
+    "eslint-plugin-promise": "^3.5.0",
+    "eslint-plugin-standard": "^3.0.1",
+    "flow-bin": "^0.46.0",
+    "flow-copy-source": "^1.1.0",
+    "nyc": "^10.3.2",
+    "pre-commit": "^1.2.2"
+  },
+  "dependencies": {
+    "babel-runtime": "^6.23.0",
+    "lodash": "^4.17.4"
+  },
+  "ava": {
+    "files": [
+      "**/*.test.js"
+    ],
+    "require": [
+      "babel-register"
+    ],
+    "babel": "inherit"
+  }
+}
