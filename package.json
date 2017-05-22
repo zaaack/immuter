@@ -10,10 +10,10 @@
     "build:lib": "cross-env NODE_ENV=production BABEL_ENV=normal babel -d ./lib -s false -D ./src",
     "build:es": "cross-env NODE_ENV=production BABEL_ENV=es babel -d ./es -s false -D ./src",
     "build:flow": "flow-copy-source -v -i '{**/test/*.js,**/*.test.js}' src",
-    "flow": "flow check",
-    "lint": "eslint src",
-    "test": "cross-env NODE_ENV=development ava",
-    "cover": "cross-env NODE_ENV=development nyc ava"
+    "flow": "cross-env NODE_ENV=production BABEL_ENV=normal flow check",
+    "lint": "cross-env NODE_ENV=production BABEL_ENV=normal eslint src",
+    "test": "cross-env NODE_ENV=development BABEL_ENV=normal ava",
+    "cover": "cross-env NODE_ENV=development BABEL_ENV=normal nyc ava"
   },
   "engines": {
     "node": ">=4.0.0"
@@ -50,7 +50,7 @@
     "babel-plugin-transform-flow-strip-types": "^6.22.0",
     "babel-plugin-transform-runtime": "^6.23.0",
     "babel-polyfill": "^6.23.0",
-    "babel-preset-latest": "^6.24.1",
+    "babel-preset-env": "^1.5.0",
     "babel-preset-stage-0": "^6.24.1",
     "cross-env": "^4.0.0",
     "eslint": "^3.19.0",

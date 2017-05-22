@@ -1,27 +1,38 @@
 {
   "env": {
     "es": {
-      "presets":[
-        ["env", {"modules": false}],
+      "presets": [
+        ["env", {
+          "modules": false
+        }],
         "stage-0"
-      ]
+      ],
+      "plugins": [
+        "transform-flow-strip-types",
+        "transform-decorators-legacy",
+        "transform-class-properties",
+        "transform-runtime",
+        "lodash", ["module-resolver", {
+          "root": ["./src"],
+          "alias": {}
+        }]
+      ],
     },
     "normal": {
       "presets": [
         ["env"],
         "stage-0"
       ],
+      "plugins": [
+        "transform-flow-strip-types",
+        "transform-decorators-legacy",
+        "transform-class-properties",
+        "transform-runtime",
+        "lodash", ["module-resolver", {
+          "root": ["./src"],
+          "alias": {}
+        }]
+      ],
     }
   },
-	"plugins": [
-    "transform-flow-strip-types",
-		"transform-decorators-legacy",
-    "transform-class-properties",
-    "transform-runtime",
-    "lodash",
-    ["module-resolver", {
-     "root": ["./src"],
-     "alias": { }
-   }]
-	]
 }
