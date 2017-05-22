@@ -1,18 +1,8 @@
 {
-  "env": {
-    "es": {
-      "presets":[
-        ["env", {"modules": false}],
-        "stage-0"
-      ]
-    },
-    "normal": {
-      "presets": [
-        ["env"],
-        "stage-0"
-      ],
-    }
-  },
+  "presets": [
+    ["env", {"modules" : false}],
+    "stage-0"
+  ],
 	"plugins": [
     "transform-flow-strip-types",
 		"transform-decorators-legacy",

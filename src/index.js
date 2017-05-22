@@ -34,7 +34,7 @@ function get<T: Object>(obj: T, path: GetPath, defaults?: *): * {
   return _get(obj, (path: any), defaults)
 }
 
-function set<T: Object>(obj: T, path: SetPath, value: *): T {
+function set<T: Object>(obj: T, path: SetPath, value?: *): T {
   if (isPlainObject(path)) {
     return toPairs((path: any)).reduce((newObj: T, pair: Array<*>) => fpSet(newObj, ...pair), obj)
   }
@@ -97,7 +97,7 @@ class ImmuterWrapper<T: Object> {
   get(path: GetPath, defaults?: *) {
     return get(this._obj, path, defaults)
   }
-  set(path: SetPath, value: *) {
+  set(path: SetPath, value?: *) {
     this._obj = set(this._obj, path, value)
     if (this._chain) return this
     return this._obj
@@ -119,8 +119,8 @@ function bindObj<T: Object>(obj: T, chain: boolean = false): ImmuterWrapper<T> {
   return new ImmuterWrapper(obj, chain)
 }
 
-export type ImmuterGet = (path: GetPath, defaults: *) => *
-export type ImmuterSet = <State>(path: SetPath, value: *) => State
+export type ImmuterGet = (path: GetPath, defaults?: *) => *
+export type ImmuterSet = <State>(path: SetPath, value?: *) => State
 export type ImmuterUpdate = <State>(path: UpdatePath, fn?: Updater) => State
 export type ImmuterDel = <State>(path: DelPath) => State
 
