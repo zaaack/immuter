@@ -1,6 +1,6 @@
 /* @flow */
 import {
-  get as _get, set as _set, isPlainObject, toPairs,
+  get as _get, set as _set, isPlainObject, toPairs as _toPairs,
   defaults as withDefaults
 } from 'lodash'
 import { set as _fpSet, update as _fpUpdate } from 'lodash/fp'
@@ -17,6 +17,15 @@ export const fpOptions = {
   rearg: false,
   curry: false,
   fixed: false, // get defaults
+}
+
+function toPairs(obj: Object) {
+  return _toPairs(obj).map(([key, val]) => {
+    if (key.indexOf(',') !== -1) {
+      key = key.split(',')
+    }
+    return [key, val]
+  })
 }
 
 const [fpSet, fpUpdate]: [typeof _fpSet, typeof _fpUpdate] =

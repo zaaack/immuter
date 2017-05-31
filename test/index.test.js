@@ -59,6 +59,21 @@ test('immutable set', t => {
     author: 'J.K.R.',
     tags: ['novel', 'magic'],
   })
+  const newBook3 = immuter.set(book, {
+    [['title', 'en']]: 'Harry Potter 1',
+    [['title', 'defaults']]: 'Harry Potter',
+    'author': 'J.K.R.',
+  })
+  t.deepEqual(book, originalBook)
+  t.deepEqual(newBook3, {
+    title: {
+      zh: '哈利·波特与魔法石',
+      en: 'Harry Potter 1',
+      defaults: 'Harry Potter',
+    },
+    author: 'J.K.R.',
+    tags: ['novel', 'magic'],
+  })
 })
 
 test('immutable update', t => {
@@ -85,6 +100,22 @@ test('immutable update', t => {
     author: 'J.K.R.',
     tags: ['novel', 'magic', 'UK'],
   })
+  const newBook3 = immuter.update(book, {
+    [['title', 'en']]: title => title + ' (Original Edition)',
+    [['title', 'defaults']]: () => 'Harry Potter',
+    'author': () => 'J.K.R.',
+    'tags': tags => tags.concat(['UK']),
+  })
+  t.deepEqual(book, originalBook)
+  t.deepEqual(newBook3, {
+    title: {
+      zh: '哈利·波特与魔法石',
+      en: 'Harry Potter and the Philosopher\'s Stone (Original Edition)',
+      defaults: 'Harry Potter',
+    },
+    author: 'J.K.R.',
+    tags: ['novel', 'magic', 'UK'],
+  })
 })
 
 test('immutable delete', t => {
@@ -102,6 +133,18 @@ test('immutable delete', t => {
   })
   t.deepEqual(book, originalBook)
   t.deepEqual(newBook2, {
+    title: {
+      zh: '哈利·波特与魔法石',
+    },
+    tags: ['novel', 'magic'],
+  })
+  const newBook3 = immuter.delete(book, {
+    [['title', 'en']]: true,
+    [['title', 'zh']]: false,
+    'author': true,
+  })
+  t.deepEqual(book, originalBook)
+  t.deepEqual(newBook3, {
     title: {
       zh: '哈利·波特与魔法石',
     },
