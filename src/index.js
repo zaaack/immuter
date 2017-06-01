@@ -151,8 +151,15 @@ function bindComp<T: Object>(
         if (name === 'get') {
           return ret
         }
-        return new Promise(resolve =>
-          this.setState((ret: any), () => resolve(ret)))
+        return new Promise((resolve, reject) => {
+          try {
+            this.setState((ret: any), () => resolve(ret))
+          } catch (e) {
+            reject(e)
+            // try fix
+            console.error(e)
+          }
+        })
       }
     })
     return comp
