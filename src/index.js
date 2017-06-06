@@ -3,12 +3,11 @@ import {
   get as _get, set as _set, isPlainObject, toPairs as _toPairs,
   defaults as withDefaults
 } from 'lodash'
-import { set as _fpSet, update as _fpUpdate } from 'lodash/fp'
-import toPath from 'lodash/toPath'
+import { set as _fpSet, unset as _fpUnset, update as _fpUpdate } from 'lodash/fp'
 
 type Path = string | Array<string>
 type GetPath = Path | { [string]: Path }
-type SetPath = Path | { [Path]: * }
+type SetPath = Path | { [Path]: any }
 type Updater = (val: any) => any
 type UpdatePath = Path | { [Path]: Updater }
 type DelPath = Path | { [Path]: boolean }
@@ -28,8 +27,8 @@ function toPairs(obj: Object) {
   })
 }
 
-const [fpSet, fpUpdate]: [typeof _fpSet, typeof _fpUpdate] =
-  (([_fpSet, _fpUpdate].map(fn => fn.convert(fpOptions))): any)
+const [fpSet, fpUnset, fpUpdate]: [typeof _fpSet, typeof _fpUnset, typeof _fpUpdate] =
+  (([_fpSet, _fpUnset, _fpUpdate].map(fn => fn.convert(fpOptions))): any)
 
 function get<T: Object>(obj: T, path: GetPath, defaults?: *): * {
   if (isPlainObject(path)) {
@@ -45,7 +44,8 @@ function get<T: Object>(obj: T, path: GetPath, defaults?: *): * {
 
 function set<T: Object>(obj: T, path: SetPath, value?: *): T {
   if (isPlainObject(path)) {
-    return toPairs((path: any)).reduce((newObj: T, pair: Array<*>) => fpSet(newObj, ...pair), obj)
+    return toPairs((path: any)).reduce((newObj: T, pair: Array<*>) =>
+      fpSet(newObj, ...pair), obj)
   }
   if (path.length === 0) {
     return obj
@@ -70,24 +70,7 @@ function del<T: Object>(obj: T, path: DelPath): T {
       return isDel ? del(newObj, subPath) : newObj
     }, obj)
   }
-  const pathArray: Array<string> = toPath(path, obj)
-  const last = pathArray[pathArray.length - 1]
-  const parentPath = pathArray.slice(0, -1)
-  if (parentPath.length === 0) {
-    const newObj = {...(obj: any)}
-    delete newObj[last]
-    return newObj
-  }
-  return update(obj, parentPath, parent => {
-    if (parent instanceof Array) {
-      const lastIdx = +last
-      parent = parent.filter((_, i) => i !== lastIdx)
-    } else if (isPlainObject(parent)) {
-      parent = { ...parent }
-      delete parent[last]
-    }
-    return parent
-  })
+  return fpUnset(obj, (path: any))
 }
 
 class ImmuterWrapper<T: Object> {

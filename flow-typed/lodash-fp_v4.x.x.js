@@ -410,7 +410,7 @@ declare module 'lodash/fp' {
     toPairs(object?: ?Object|Array<*>): NestedArray<any>;
     toPairsIn(object?: ?Object): NestedArray<any>;
     transform(collection: Object|Array<any>, iteratee?: OIteratee<*>, accumulator?: any): any;
-    unset(object?: ?Object, path?: ?Array<string>|string): bool;
+    unset<T: Object>(object?: ?T, path?: ?Array<string>|string): T;
     update<T: Object>(object: T, path: string[]|string, updater: Function): T;
     updateWith(object: Object, path: string[]|string, updater: Function, customizer?: Function): Object;
     values(object?: ?Object): Array<any>;
