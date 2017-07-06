@@ -112,9 +112,9 @@ function bindObj<T: Object>(obj: T, chain: boolean = false): ImmuterWrapper<T> {
 }
 
 export type ImmuterGet = (path: GetPath, defaults?: *) => *
-export type ImmuterSet = <State>(path: SetPath, value?: *) => State
-export type ImmuterUpdate = <State>(path: UpdatePath, fn?: Updater) => State
-export type ImmuterDel = <State>(path: DelPath) => State
+export type ImmuterSet<State> = (path: SetPath, value?: *) => State
+export type ImmuterUpdate<State> = (path: UpdatePath, fn?: Updater) => State
+export type ImmuterDel<State> = (path: DelPath) => State
 
 function bindComp<T: Object>(
   ns: boolean | string = false,
