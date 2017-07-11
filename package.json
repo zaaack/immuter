@@ -1,6 +1,6 @@
 {
   "name": "immuter",
-  "version": "1.0.5",
+  "version": "2.0.0",
   "description": "An immutable react/redux state update helper, easily handle nested state with less code.",
   "main": "lib/index.js",
   "module": "es/index.js",
