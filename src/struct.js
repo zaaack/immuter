@@ -5,49 +5,49 @@ import { fpSet } from './common'
 function getType(obj: any) {
   return Object.prototype.toString.call(obj).slice(8, -1).toLowerCase()
 }
-const STRUCT_INSTANCE = '__structInstance'
+const STRUCT_CONTEXT = '__structContext'
 const primitiveTypes = fromPairs([
   'boolean', 'string', 'number', 'null', 'undefined',
   'array', 'map', 'set', 'function', 'date', 'regexp',
 ].map(i => [i, true]))
 
 export default function Struct<T: Object>(state: T): T {
-  return (new InternalStruct(state): any)
+  return _Struct(state)
 }
 
 Struct.clone = function<T: Object> (struct: T): T {
-  const ctx = struct[STRUCT_INSTANCE]
+  const ctx = struct[STRUCT_CONTEXT]
   if (!ctx) {
-    return (new InternalStruct(struct): any)
+    return _Struct(struct)
   }
-  return (new InternalStruct(ctx.__state, ctx.__newState): any)
+  return _Struct(ctx.state, ctx.newState)
 }
 
-Struct.is = function (struct: any) {
+Struct.isStruct = function (struct: any) {
   if (!struct) {
     return false
   }
-  return Boolean(struct[STRUCT_INSTANCE])
+  return Boolean(struct[STRUCT_CONTEXT])
 }
 
 function makeHandler({ctx, chain = []}: {
-  ctx: {__state: any, __newState: any},
+  ctx: {state: any, newState: any},
   chain?: string[]
 }) {
   return {
     get(target: any, property: string, receiver: any) {
-      // console.log('get', property, /*ctx.__state, ctx.__newState, ctx*/)
-      if (target === ctx.__state && property === STRUCT_INSTANCE) {
+      // console.log('get', property, /*ctx.state, ctx.newState, ctx*/)
+      if (target === ctx.state && property === STRUCT_CONTEXT) {
         // console.log('get instance', STRUCT_INSTANCE, ctx)
         return ctx
       }
       const _chain = chain.concat(property)
-      let val = _get(ctx.__newState, _chain)
+      let val = _get(ctx.newState, _chain)
       if (typeof val === 'undefined') {
-        val = _get(ctx.__state, _chain)
-      } else if (isPlainObject(val) || (val instanceof InternalStruct)) {
+        val = _get(ctx.state, _chain)
+      } else if (isPlainObject(val) || (Struct.isStruct(val))) {
         val = {
-          ...(_get(ctx.__state, _chain) || {}),
+          ...(_get(ctx.state, _chain) || {}),
           ...val,
         }
       }
@@ -60,31 +60,23 @@ function makeHandler({ctx, chain = []}: {
     },
     set(target, property, value, receiver) {
       // console.log('set', chain, property, value)
-      ctx.__newState = fpSet(ctx.__newState, chain.concat(property), value)
+      ctx.newState = fpSet(ctx.newState, chain.concat(property), value)
       return true
     },
   }
 }
 
-export class InternalStruct<T: Object> {
-  constructor(state: T, newState?: Object) {
-    if (!(this instanceof InternalStruct)) {
-      return new InternalStruct(state, newState)
-    }
-    const _this: {__state: any, __newState: any, clone: any} = (this: any)
-    _this.__state = {...state}
-    _this.__newState = {}
-    if (newState) {
-      _this.__newState = newState
-    }
-    // Fix ie polyfill
-    Object.defineProperty(_this.__state, STRUCT_INSTANCE, {
-      enumerable: false,
-      configurable: true,
-      writable: true,
-      value: _this,
-    })
-    const ret: any = new Proxy(_this.__state, makeHandler({ctx: _this}))
-    return ret
+function _Struct<T: Object>(state: T, newState?: Object): T {
+  const ctx = {
+    state: {...state},
+    newState: newState || {},
   }
+  // Fix ie polyfill
+  Object.defineProperty(ctx.state, STRUCT_CONTEXT, {
+    enumerable: false,
+    configurable: true,
+    writable: true,
+    value: ctx,
+  })
+  return (new Proxy(ctx.state, makeHandler({ctx})): any)
 }

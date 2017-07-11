@@ -20,9 +20,11 @@ npm i immuter
 yarn add immuter
 ```
 
-## New Struct Feature!
+## New Type-Safe Struct Feature!
 
-Struct is a experiment feature, implement by Proxy, highly inspired by [monolite](https://github.com/kube/monolite).
+Struct is a experiment feature, implemented by Proxy, highly inspired by [monolite](https://github.com/kube/monolite).
+
+The most valuable part is it works perfect with flow/ts, nd you can write your code like there is language level support with immutable data!
 
 It's using es6 Proxy internally, but don't worry, since the structure is fixed, we can using [proxy-polyfill](https://github.com/GoogleChrome/proxy-polyfill) to support event IE 9!
 
@@ -46,7 +48,7 @@ struct1.author === 'New Author' // true
 
 struct1.title.en = 'New Title'
 
-Struct.is(struct) // true
+Struct.isStruct(struct) // true
 ```
 
 ## Demo

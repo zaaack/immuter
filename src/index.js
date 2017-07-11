@@ -5,7 +5,7 @@ import {
 } from 'lodash'
 import { fpSet, fpUnset, fpUpdate } from './common'
 import Struct from './struct'
-import type { Path, GetPath, SetPath, Updater, UpdatePath, DelPath } from './common'
+import type { GetPath, SetPath, Updater, UpdatePath, DelPath } from './common'
 
 function toPairs(obj: Object) {
   return _toPairs(obj).map(([key, val]) => {

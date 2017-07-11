@@ -3,10 +3,10 @@ import { set as _fpSet, unset as _fpUnset, update as _fpUpdate } from 'lodash/fp
 
 export type Path = string | Array<string>
 export type GetPath = Path | { [string]: Path }
-export type SetPath = Path | { [Path]: any }
+export type SetPath = Path | { [string]: any }
 export type Updater = (val: any) => any
-export type UpdatePath = Path | { [Path]: Updater }
-export type DelPath = Path | { [Path]: boolean }
+export type UpdatePath = Path | { [string]: Updater }
+export type DelPath = Path | { [string]: boolean }
 
 export const fpOptions = {
   rearg: false,
