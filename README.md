@@ -24,9 +24,11 @@ yarn add immuter
 
 Struct is a experiment feature, implemented by Proxy, highly inspired by [monolite](https://github.com/kube/monolite).
 
-The most valuable part is it works perfect with flow/ts, nd you can write your code like there is language level support with immutable data!
+The most valuable part is it's clean API, write your code like language level support with immutable data. And because of this, it can work perfect with both flow and ts!
 
 It's using es6 Proxy internally, but don't worry, since the structure is fixed, we can using [proxy-polyfill](https://github.com/GoogleChrome/proxy-polyfill) to support event IE 9!
+
+![](docs/screen.gif)
 
 ```js
 import { Struct }
@@ -40,7 +42,7 @@ const struct = Struct({
   tags: ['novel', 'magic'],
 })
 
-const struct1 = Struct.clone(struct) // Create a new struct instance, it will only change modified part to optimize performance, and works perfectly with flow/typescript.
+const struct1 = Struct.clone(struct) // Clone struct, it will only change modified part to optimize performance.
 
 struct1.author = 'New Author'
 struct.author === 'J. k. rowling' // true
