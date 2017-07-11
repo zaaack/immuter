@@ -1,22 +1,11 @@
 /* @flow */
 import {
-  get as _get, set as _set, isPlainObject, toPairs as _toPairs,
+    get as _get, set as _set, isPlainObject, toPairs as _toPairs,
   defaults as withDefaults
 } from 'lodash'
-import { set as _fpSet, unset as _fpUnset, update as _fpUpdate } from 'lodash/fp'
-
-type Path = string | Array<string>
-type GetPath = Path | { [string]: Path }
-type SetPath = Path | { [Path]: any }
-type Updater = (val: any) => any
-type UpdatePath = Path | { [Path]: Updater }
-type DelPath = Path | { [Path]: boolean }
-
-export const fpOptions = {
-  rearg: false,
-  curry: false,
-  fixed: false, // get defaults
-}
+import { fpSet, fpUnset, fpUpdate } from './common'
+import Struct from './struct'
+import type { Path, GetPath, SetPath, Updater, UpdatePath, DelPath } from './common'
 
 function toPairs(obj: Object) {
   return _toPairs(obj).map(([key, val]) => {
@@ -26,9 +15,6 @@ function toPairs(obj: Object) {
     return [key, val]
   })
 }
-
-const [fpSet, fpUnset, fpUpdate]: [typeof _fpSet, typeof _fpUnset, typeof _fpUpdate] =
-  (([_fpSet, _fpUnset, _fpUpdate].map(fn => fn.convert(fpOptions))): any)
 
 function get<T: Object>(obj: T, path: GetPath, defaults?: *): * {
   if (isPlainObject(path)) {
@@ -139,7 +125,6 @@ function bindComp<T: Object>(
             this.setState((ret: any), () => resolve(ret))
           } catch (e) {
             reject(e)
-            // try fix
             console.error(e)
           }
         })
@@ -148,6 +133,6 @@ function bindComp<T: Object>(
     return comp
   }
 }
-const immuter = { bindObj, bindComp, get, set, update, del, delete: del }
-export { bindObj, bindComp, get, set, update, del }
+const immuter = { bindObj, bindComp, get, set, update, del, delete: del, Struct }
+export { bindObj, bindComp, get, set, update, del, Struct }
 export default immuter

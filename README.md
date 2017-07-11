@@ -20,9 +20,38 @@ npm i immuter
 yarn add immuter
 ```
 
+## New Struct Feature!
+
+Struct is a experiment feature, implement by Proxy, highly inspired by [monolite](https://github.com/kube/monolite).
+
+It's using es6 Proxy internally, but don't worry, since the structure is fixed, we can using [proxy-polyfill](https://github.com/GoogleChrome/proxy-polyfill) to support event IE 9!
+
+```js
+import { Struct }
+
+const struct = Struct({
+  title: {
+    zh: '哈利·波特与魔法石',
+    en: 'Harry Potter and the Philosopher\'s Stone',
+  },
+  author: 'J. k. rowling',
+  tags: ['novel', 'magic'],
+})
+
+const struct1 = Struct.clone(struct) // Create a new struct instance, it will only change modified part to optimize performance, and works perfectly with flow/typescript.
+
+struct1.author = 'New Author'
+struct.author === 'J. k. rowling' // true
+struct1.author === 'New Author' // true
+
+struct1.title.en = 'New Title'
+
+Struct.is(struct) // true
+```
+
 ## Demo
 
-### Simple
+### Simple mutation method
 ```js
 
 import Immuter from 'immuter'
@@ -226,4 +255,4 @@ export type ImmuterUpdate = <State>(path: UpdatePath, fn?: Updater) => State
 export type ImmuterDel = <State>(path: DelPath) => State
 ```
 
-## Licence MIT 
+## Licence MIT

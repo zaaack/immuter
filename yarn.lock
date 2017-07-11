@@ -1959,9 +1959,9 @@ flat-cache@^1.2.1:
     graceful-fs "^4.1.2"
     write "^0.2.1"
 
-flow-bin@^0.46.0:
-  version "0.46.0"
-  resolved "http://registry.npm.taobao.org/flow-bin/download/flow-bin-0.46.0.tgz#06ad7fe19dddb1042264438064a2a32fee12b872"
+flow-bin@^0.49.1:
+  version "0.49.1"
+  resolved "http://registry.npm.taobao.org/flow-bin/download/flow-bin-0.49.1.tgz#c9e456b3173a7535a4ffaf28956352c63bb8e3e9"
 
 flow-copy-source@^1.1.0:
   version "1.1.0"
@@ -3469,6 +3469,10 @@ process-nextick-args@~1.0.6:
 progress@^1.1.8:
   version "1.1.8"
   resolved "http://registry.npm.taobao.org/progress/download/progress-1.1.8.tgz#e260c78f6161cdd9b0e56cc3e0a85de17c7a57be"
+
+proxy-polyfill@^0.1.7:
+  version "0.1.7"
+  resolved "http://registry.npm.taobao.org/proxy-polyfill/download/proxy-polyfill-0.1.7.tgz#1c06fe10b0b606e79268e14d4528952e64036d39"
 
 ps-tree@^1.0.1:
   version "1.1.0"
