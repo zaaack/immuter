@@ -1,3 +1,4 @@
+// @flow
 import test from 'ava'
 import { Struct } from '../src'
 import cloneDeep from 'lodash/cloneDeep'

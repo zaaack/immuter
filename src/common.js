@@ -18,28 +18,3 @@ const [fpSet, fpUnset, fpUpdate]: [typeof _fpSet, typeof _fpUnset, typeof _fpUpd
   (([_fpSet, _fpUnset, _fpUpdate].map(fn => fn.convert(fpOptions))): any)
 
 export { fpSet, fpUnset, fpUpdate }
-
-export class IterableWeakMap {
-  constructor(init) {
-    this._keys = new WeakSet(Object.keys(init))
-    this._wm = new WeakMap(init)
-  }
-  clear() {
-    this._wm = new WeakMap()
-    this._keys = new WeakSet()
-  }
-  delete(k) {
-    this._keys.delete(k)
-    return this._wm.delete(k)
-  }
-  get(k) {
-    return this._wm.get(k)
-  }
-  has(k) {
-    return this._wm.has(k) && this._keys.has(k)
-  }
-  set(k, v) {
-    this._wm.set(k, v)
-    return this
-  }
-}
