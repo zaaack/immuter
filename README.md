@@ -35,10 +35,10 @@ You can only change struct's deep properties by straight call, e.g.
 struct.a.b.c.d = ...
 
 ```
-other wise you might be changing the copy. But there is no limitation for read.
-It's because the child Proxy instances are cached for shallow compare.
+other wise you might be changing the copy, but there is no limitation for read.
+The reason is that the child Proxy instances are cached for shallow compare.
 
-If we don't won't this limitation, we need to implement a specific compare function for struct data, and `===` won't work for cloned struct's child.
+If we don't want this limitation, we need to implement a specific compare function for struct data, and `===` won't work for cloned struct's child.
 
 ![](docs/screen.gif)
 
