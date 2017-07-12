@@ -12,7 +12,7 @@
     "build:flow": "flow-copy-source -v -i '{**/test/*.js,**/*.test.js}' src",
     "flow": "cross-env NODE_ENV=production BABEL_ENV=normal flow check",
     "lint": "cross-env NODE_ENV=production BABEL_ENV=normal eslint src",
-    "test": "cross-env NODE_ENV=development BABEL_ENV=normal ava",
+    "test": "cross-env NODE_ENV=development BABEL_ENV=normal ava --serial",
     "cover": "cross-env NODE_ENV=development BABEL_ENV=normal nyc ava"
   },
   "engines": {

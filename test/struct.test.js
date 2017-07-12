@@ -4,27 +4,33 @@ import cloneDeep from 'lodash/cloneDeep'
 import merge from 'lodash/merge'
 import isEqual from 'lodash/isEqual'
 
-const category = Struct({
-  name: 'novel',
-  count: 123,
+let plain
+let book
+let originalBook
+
+test.before(() => {
+  plain = (obj) => {
+    return cloneDeep(obj)
+  }
+  const category = Struct({
+    name: 'novel',
+    count: 123,
+  })
+  book = {
+    title: {
+      zh: '哈利·波特与魔法石',
+      en: 'Harry Potter and the Philosopher\'s Stone',
+    },
+    category,
+    category2: Struct.clone(category),
+    author: 'J. k. rowling',
+    tags: ['novel', 'magic'],
+    pub_date: new Date('2017-7-11'),
+    reg: /\d/,
+  }
+
+  originalBook = cloneDeep(book)
 })
-
-function plain(obj) {
-  return cloneDeep(obj)
-}
-
-const book = {
-  title: {
-    zh: '哈利·波特与魔法石',
-    en: 'Harry Potter and the Philosopher\'s Stone',
-  },
-  category,
-  author: 'J. k. rowling',
-  tags: ['novel', 'magic'],
-  pub_date: new Date('2017-7-11'),
-  reg: /\d/,
-}
-const originalBook = cloneDeep(book)
 
 test('struct', t => {
   const struct = Struct(book)
@@ -41,6 +47,10 @@ test('struct', t => {
       name: 'novel',
       count: 123,
     },
+    'category2': {
+      name: 'novel',
+      count: 123,
+    },
     reg: /\d/,
     'author': 'J. k. rowling',
     'tags': [
@@ -53,6 +63,9 @@ test('struct', t => {
   const struct2 = Struct.clone(struct1)
   t.is(struct1.author, 'New Author')
   t.is(struct2.author, 'New Author')
+  console.log('struct.title', struct2.title, struct.title, struct2.title === struct.title)
+  t.is(struct1.title, struct.title)
+  t.true(struct2.title === struct.title)
 
   t.deepEqual(struct2.title, {
     zh: '哈利·波特与魔法石',
@@ -74,6 +87,10 @@ test('struct', t => {
       name: 'novel',
       count: 123,
     },
+    category2: {
+      name: 'novel',
+      count: 123,
+    },
     reg: /\d/,
     pub_date: book.pub_date,
     author: 'New Author',
@@ -85,6 +102,10 @@ test('struct', t => {
       en: 'Harry Potter and the Philosopher\'s Stone',
     },
     category: {
+      name: 'novel',
+      count: 123,
+    },
+    category2: {
       name: 'novel',
       count: 123,
     },
@@ -129,9 +150,22 @@ test('struct struct', t => {
   const struct1 = Struct.clone(struct)
   struct1.category.name = 'array'
   t.deepEqual(struct1.category.name, 'array')
+  t.false(struct1.category === struct.category)
   t.deepEqual(plain(struct1.category), {
     name: 'array',
     count: 123,
   })
+  t.is(struct1.title, struct.title)
+  t.is(struct1.category2.name, 'novel')
+  t.is(struct1.category2, struct.category2)
   t.deepEqual(struct1.category.name, 'array')
 })
+
+// test('struct wrong mutate', t => {
+//   const struct = Struct(book)
+//   const struct1 = Struct.clone(struct)
+//   const error = t.throws(() => {
+//     struct.author = 'New Author'
+//   }, TypeError)
+//   t.is(error.message, 'Cannot set a struct\'s property after it\'s cloned, it\'s immutable.')
+// })

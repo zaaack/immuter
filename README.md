@@ -28,6 +28,18 @@ The most valuable part is it's clean API, write your code like language level su
 
 It's using es6 Proxy internally, but don't worry, since the structure is fixed, we can using [proxy-polyfill](https://github.com/GoogleChrome/proxy-polyfill) to support event IE 9!
 
+### Notice
+
+You can only change struct's deep properties by straight call, e.g.
+```js
+struct.a.b.c.d = ...
+
+```
+other wise you might be changing the copy. But there is no limitation for read.
+It's because the child Proxy instances are cached for shallow compare.
+
+If we don't won't this limitation, we need to implement a specific compare function for struct data, and `===` won't work for cloned struct's child.
+
 ![](docs/screen.gif)
 
 ```js
