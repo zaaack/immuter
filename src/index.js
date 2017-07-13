@@ -4,7 +4,7 @@ import {
   defaults as withDefaults
 } from 'lodash'
 import { fpSet, fpUnset, fpUpdate } from './common'
-import Struct from './struct'
+import Struct, { setT } from './struct'
 import type { GetPath, SetPath, Updater, UpdatePath, DelPath } from './common'
 
 function toPairs(obj: Object) {
@@ -133,6 +133,6 @@ function bindComp<T: Object>(
     return comp
   }
 }
-const immuter = { bindObj, bindComp, get, set, update, del, delete: del, Struct }
-export { bindObj, bindComp, get, set, update, del, Struct }
+const immuter = { bindObj, bindComp, get, set, update, del, delete: del, Struct, setT }
+export { bindObj, bindComp, get, set, update, del, Struct, setT }
 export default immuter

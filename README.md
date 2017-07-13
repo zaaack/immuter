@@ -20,11 +20,11 @@ npm i immuter
 yarn add immuter
 ```
 
-## New Type-Safe Struct Feature!
+## New Full-Static-Type-Safe Struct Feature!
 
 ![](docs/screen.gif)
 
-Struct is a experiment feature, implemented by Proxy, highly inspired by [monolite](https://github.com/kube/monolite).
+Struct is a experiment feature, implemented by Proxy, highly inspired by [monolite](https://github.com/kube/monolite). I think you can call it an optimized version of deep clone, and works perfectly with React/Redux, have the same performance benefits of Facebook's immutable-js, but more natural, and **Full-Static-Type-Safe** support.
 
 The most valuable part is it's clean API, write your code like we have language level support with immutable data. And because of this, it can work perfectly with both flow and ts!
 
@@ -36,17 +36,24 @@ It's using es6 Proxy internally, but don't worry, since the structure is fixed, 
 You can only change struct's deep properties by straight call, other wise you might be changing the another struct in the clone chain, but there is no limitation for read.
 The reason is that the child Proxy instances are cached for shallow compare. e.g.
 ```js
+// Ok
 const struct1 = Struct.clone(struct)
-// ok
 struct.a.b.c.d = ...
 struct1.a.b.c.d = ...
-// ok
+// OK
+const struct1 = Struct.clone(struct)
 const { a } = struct1
 a.b = ...
 a.b.c.d = ...
 struct.a // read a
 struct.a.b.c.d = ...
+// Best
+struct = Struct.clone(struct)
+const { a } = struct
+a.c.d = ...
+struct.a.c.d.e = ...
 // Buggy
+const struct1 = Struct.clone(struct)
 const { a } = struct1
 struct.a // read a
 a.b.c.d = ... // `struct1.a` is strict equal with `struct.a`, so if you called `struct.a` before, a's context is set to `struct`, so you are modifying `struct.a` now, not `struct1.a`. I can do nothing to fix or warn you in the runtime, and since this is an immutable library, directly changing the original data is not recommended anyway.

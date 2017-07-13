@@ -162,11 +162,81 @@ test('struct struct', t => {
   t.deepEqual(struct1.category.name, 'array')
 })
 
+test('struct deep', t => {
+  const data = {
+    deep: {
+      child: {
+        bb: {
+          cc: {
+            dd: 1,
+          },
+        },
+      },
+      ee: 'ee',
+    },
+  }
+  const struct = Struct(data)
+  const struct1 = Struct.clone(struct)
+  t.is(struct1.deep.child.bb.cc.dd, 1)
+  t.true(struct.deep.child.bb.cc.dd === struct1.deep.child.bb.cc.dd)
+  t.true(struct.deep.child.bb === struct1.deep.child.bb)
+  struct1.deep.child.bb.cc.dd = 2
+  t.is(struct1.deep.child.bb.cc.dd, 2)
+  t.is(struct.deep.child.bb.cc.dd, 1)
+  t.false(struct1.deep.child.bb === struct.deep.child.bb)
+  t.false(struct1.deep.child.bb.cc === struct.deep.child.bb.cc)
+})
+
+test('struct clone child', t => {
+  const data = {
+    deep: {
+      child: {
+        bb: {
+          cc: {
+            dd: 1,
+          },
+        },
+      },
+      ee: 'ee',
+    },
+  }
+  const struct = Struct(data)
+  const { dd } = struct.deep.child.bb.cc
+  const child = Struct.clone(struct.deep.child)
+  Struct.debug(child, true)
+  // t.true(child.bb === struct.deep.child.bb) wrong set context order, then you are editint struct.deep.child
+  try {
+    child.bb.cc.dd = 2
+  } catch (e) {
+    Struct.debug(child, true)
+    throw e
+  }
+  t.false(child.bb === struct.deep.child.bb)
+  t.false(child.bb.cc === struct.deep.child.bb.cc)
+  t.is(child.bb.cc.dd, 2)
+  t.is(struct.deep.child.bb.cc.dd, 1)
+  t.is(dd, 1)
+})
+
+test('struct right mutate', t => {
+  const struct = Struct(book)
+  const struct1 = Struct.clone(struct)
+  const { category: category1 } = struct1
+  category1.name = 'New Title'
+  const { category } = struct
+  t.is(category.name, 'novel')
+  category.name = 'New Title 2'
+  t.is(struct.category.name, 'New Title 2')
+  t.is(struct1.category.name, 'New Title')
+})
+
+// // This will cause modify recently called struct without error, can't fix in runtime.
 // test('struct wrong mutate', t => {
 //   const struct = Struct(book)
 //   const struct1 = Struct.clone(struct)
-//   const error = t.throws(() => {
-//     struct.author = 'New Author'
-//   }, TypeError)
-//   t.is(error.message, 'Cannot set a struct\'s property after it\'s cloned, it\'s immutable.')
+//   const { category } = struct1
+//   console.log(struct.category)
+//   category.name = 'New Title'
+//   t.is(struct.category.name, 'novel')
+//   t.is(struct1.category.name, 'New Title')
 // })

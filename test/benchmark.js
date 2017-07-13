@@ -1,5 +1,3 @@
-// @flow
-
 const Immuter = require('../lib/index')
 const Benchmark = require('benchmark')
 const Immutable = require('immutable')
