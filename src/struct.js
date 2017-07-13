@@ -1,6 +1,6 @@
 // @flow
-import { get as _get, fromPairs } from 'lodash'
-import { fpSet } from './common'
+import { fromPairs } from 'lodash'
+import { getIn, setIn } from 'timm'
 
 function getType(obj: any) {
   return Object.prototype.toString.call(obj).slice(8, -1).toLowerCase()
@@ -64,7 +64,7 @@ function makeHandler({
         }
       }
       const _chain = chain.concat(property)
-      let val = _get(state.data, _chain)
+      let val = getIn(state.data, _chain)
       const valType = getType(val)
       // console.log('val before scalar', _chain, val)
       if (valType in primitiveTypes) {
@@ -105,7 +105,7 @@ function makeHandler({
       //   throw new TypeError('Cannot set a struct\'s property after it\'s cloned, it\'s immutable.')
       // }
       const _chain = chain.concat(property)
-      state.data = fpSet(state.data, _chain, value)
+      state.data = setIn(state.data, _chain, value)
       return true
     },
   }

@@ -22,28 +22,41 @@ yarn add immuter
 
 ## New Type-Safe Struct Feature!
 
+![](docs/screen.gif)
+
 Struct is a experiment feature, implemented by Proxy, highly inspired by [monolite](https://github.com/kube/monolite).
 
-The most valuable part is it's clean API, write your code like language level support with immutable data. And because of this, it can work perfect with both flow and ts!
+The most valuable part is it's clean API, write your code like we have language level support with immutable data. And because of this, it can work perfectly with both flow and ts!
 
 It's using es6 Proxy internally, but don't worry, since the structure is fixed, we can using [proxy-polyfill](https://github.com/GoogleChrome/proxy-polyfill) to support event IE 9!
 
+
 ### Notice
 
-You can only change struct's deep properties by straight call, e.g.
+You can only change struct's deep properties by straight call, other wise you might be changing the another struct in the clone chain, but there is no limitation for read.
+The reason is that the child Proxy instances are cached for shallow compare. e.g.
 ```js
+const struct1 = Struct.clone(struct)
+// ok
 struct.a.b.c.d = ...
-
+struct1.a.b.c.d = ...
+// ok
+const { a } = struct1
+a.b = ...
+a.b.c.d = ...
+struct.a // read a
+struct.a.b.c.d = ...
+// Buggy
+const { a } = struct1
+struct.a // read a
+a.b.c.d = ... // `struct1.a` is strict equal with `struct.a`, so if you called `struct.a` before, a's context is set to `struct`, so you are modifying `struct.a` now, not `struct1.a`. I can do nothing to fix or warn you in the runtime, and since this is an immutable library, directly changing the original data is not recommended anyway.
 ```
-other wise you might be changing the copy, but there is no limitation for read.
-The reason is that the child Proxy instances are cached for shallow compare.
 
 If we don't want this limitation, we need to implement a specific compare function for struct data, and `===` won't work for cloned struct's child.
 
-![](docs/screen.gif)
-
+### More Code Example:
 ```js
-import { Struct }
+import { Struct } from 'immuter'
 
 const struct = Struct({
   title: {
