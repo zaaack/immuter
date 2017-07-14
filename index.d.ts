@@ -21,6 +21,7 @@ declare module 'immuter' {
 
   export interface ImmuterInterface {
     bindObj<T>(obj: T, wrap?: boolean): ImmuterWrapper<T>;
+    bindComp(ns?: boolean | string, includes?: Array<string>, excludes?: Array<string>): Function;
     get<T>(obj: T, path: GetPath, defaults?: any): any;
     set<T>(obj: T, path: SetPath, value?: any): T;
     update<T>(obj: T, path: SetPath, fn?: Updater): T;
@@ -32,6 +33,7 @@ declare module 'immuter' {
     <T>(obj: T): T;
     isStruct<T>(obj: T): boolean;
     clone<T>(obj: T): T;
+    debug(obj: any, json?: boolean, out?: boolean);
   }
 
   export const Struct: StructConstructor

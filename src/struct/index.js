@@ -1,35 +1,13 @@
 // @flow
-import { fromPairs } from 'lodash'
 import { getIn, setIn } from 'timm'
+import {
+  getType, symbol, STRUCT_ROOT, STRUCT_STATE, STRUCT_CONTEXT,
+  STRUCT_CHILD_RAW, STRUCT_CHAIN, primitiveTypes
+} from './common'
+import type { State, OnChange, Context, StructT } from './common'
 
-function getType(obj: any) {
-  return Object.prototype.toString.call(obj).slice(8, -1).toLowerCase()
-}
-function symbol(label) {
-  return label
-  // Looks like proxy-polyfill doesn't support symbol property
-  // return (typeof Symbol === 'function') ? Symbol(label) : label
-}
-symbol.existed = typeof Symbol === 'function'
-// export just for debug
-const STRUCT_ROOT = symbol('##__structRoot') // just mark it's root
-const STRUCT_STATE = symbol('##__structState') // lost after clone
-const STRUCT_CONTEXT = symbol('##__structContext') // won't lost after clone
-const STRUCT_CHILD_RAW = symbol('##__structChildRaw') // raw value of child
-const STRUCT_CHAIN = symbol('##__structChain')
-const primitiveTypes = fromPairs([
-  'boolean', 'string', 'number', 'null', 'undefined',
-  'array', 'map', 'set', 'function', 'date', 'regexp',
-  'symbol',
-].map(i => [i, true]))
+export type { StructT }
 
-type State = {
-  data: any,
-}
-type Context = {
-  cache: WeakMap<any, Proxy<any>>
-}
-export type StructT<T: Object> = T
 // Pre define property for ie polyfill
 function preDefine(obj: Object, key: string, val: any) {
   if (key in obj) return
@@ -57,7 +35,7 @@ function makeHandler({
   ctx,
   root,
 }: {
-  state: State,
+  state: State<any>,
   chain?: Array<string | number>,
   ctx: Context,
   root: boolean,
@@ -115,43 +93,51 @@ function makeHandler({
       }
       const _chain = chain.concat(property)
       state.data = setIn(state.data, _chain, value)
+      state.onChange && state.onChange(_chain, value)
       return true
     },
   }
 }
 
-function _Struct<T: Object>(
-  data: T,
+function _Struct<T>(
+  state: State<T>,
   ctx?: Context = {cache: new WeakMap()}
 ): T {
-  if (!data) {
-    return data
+  if (!state.data) {
+    return state.data
   }
-  const state = {
-    data: {...data},
-  }
-  preDefineAll(state.data)
+  preDefineAll((state.data: any))
   const ret: any = new Proxy(state.data, makeHandler({state, ctx, root: true}))
   return ret
 }
 
-export default function Struct<T: Object>(data: T): StructT<T> {
+export default function Struct<T>(data: T, onChange?: OnChange): StructT<T> {
   if (Struct.isStruct(data)) {
     return Struct.clone(data)
   }
-  return _Struct(data)
+  return _Struct({
+    data: {...(data: any)},
+    onChange,
+  })
 }
 
-Struct.clone = function<T: Object> (struct: StructT<T> | T): StructT<T> {
+Struct.clone = function<T> (_struct: StructT<T> | T, onChange?: OnChange): StructT<T> {
+  const struct: any = _struct
   const state = struct[STRUCT_STATE]
   const isRoot = struct[STRUCT_ROOT]
   const ctx = struct[STRUCT_CONTEXT]
   if (isRoot && state && ctx) {
-    return _Struct(state.data, ctx)
+    return _Struct({
+      data: {...state.data},
+      onChange,
+    }, ctx)
   }
   const raw = struct[STRUCT_CHILD_RAW]
   if (!isRoot && raw && ctx && typeof raw === 'object') {
-    return _Struct(raw, ctx)
+    return _Struct({
+      data: {...raw},
+      onChange,
+    }, ctx)
   }
   console.error(struct, state, isRoot, ctx)
   throw new TypeError('Cannot clone a non-struct!')
@@ -164,7 +150,7 @@ Struct.isStruct = function (struct: any) {
   return Boolean(struct[STRUCT_ROOT] && struct[STRUCT_STATE] && struct[STRUCT_CONTEXT])
 }
 
-Struct.debug = function (struct: any, json: boolean = false) {
+Struct.debug = function (struct: any, json: boolean = false, log: boolean = true) {
   let meta = {
     isStruct: Struct.isStruct(struct),
     struct: struct,
@@ -181,7 +167,10 @@ Struct.debug = function (struct: any, json: boolean = false) {
   if (json) {
     meta = JSON.stringify(meta, null, 2)
   }
-  console.log(meta)
+  if (log) {
+    console.log(meta)
+  }
+  return meta
 }
 
 const chainMap: WeakMap<Object, string[]> = new WeakMap()
