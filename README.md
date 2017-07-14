@@ -35,23 +35,35 @@ It's using es6 Proxy internally, but don't worry, since the structure is fixed, 
 
 You can only change struct's deep properties by straight call, other wise you might be changing the another struct in the clone chain, but there is no limitation for read.
 The reason is that the child Proxy instances are cached for shallow compare. e.g.
+
+*Thanks for [@hjiayz](https://github.com/hjiayz/fraction-math-js)'s idea, we have a more safe interface, mutation should be called in the callback, and shouldn't access old struct.*
 ```js
-// Ok
+// Best, thanks
+struct = struct/* old struct */.clone((struct /* cloned struct*/) => {
+  struct.a.b.c.d = ...
+  struct.b.a.c = ...
+  const { a } = struct
+  a.c.d = ...
+  struct.a.c.d.e = ...
+  // return struct // you can return the struct or not, if you return we will use return first.
+})
+// ok
+struct = Struct.clone(struct /* old struct */, (struct /* cloned struct*/) => {
+  const { a } = struct
+  a.c.d = ...
+  struct.a.c.d.e = ...
+})
+// Not good
 const struct1 = Struct.clone(struct)
 struct.a.b.c.d = ...
 struct1.a.b.c.d = ...
-// OK
+// Not good
 const struct1 = Struct.clone(struct)
 const { a } = struct1
 a.b = ...
 a.b.c.d = ...
 struct.a // read a
 struct.a.b.c.d = ...
-// Best
-struct = Struct.clone(struct)
-const { a } = struct
-a.c.d = ...
-struct.a.c.d.e = ...
 // Buggy
 const struct1 = Struct.clone(struct)
 const { a } = struct1
@@ -65,7 +77,7 @@ If we don't want this limitation, we need to implement a specific compare functi
 ```js
 import { Struct } from 'immuter'
 
-const struct = Struct({
+let struct = Struct({
   title: {
     zh: '哈利·波特与魔法石',
     en: 'Harry Potter and the Philosopher\'s Stone',
@@ -74,13 +86,14 @@ const struct = Struct({
   tags: ['novel', 'magic'],
 })
 
-const struct1 = Struct.clone(struct) // Clone struct, it will only change modified part to optimize performance.
+const struct1 = struct.clone(struct => {
+  struct.author = 'New Author'
+  struct.title.en = 'New Title'
+  // return struct // return or not
+}) // Clone struct, it will only change modified part to optimize performance.
 
-struct1.author = 'New Author'
 struct.author === 'J. k. rowling' // true
-struct1.author === 'New Author' // true
-
-struct1.title.en = 'New Title'
+struct2.author === 'New Author' // true
 
 Struct.isStruct(struct) // true
 ```

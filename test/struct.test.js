@@ -187,19 +187,20 @@ test('struct deep', t => {
   t.false(struct1.deep.child.bb.cc === struct.deep.child.bb.cc)
 })
 
-test('struct clone child', t => {
-  const data = {
-    deep: {
-      child: {
-        bb: {
-          cc: {
-            dd: 1,
-          },
+const data = {
+  deep: {
+    child: {
+      bb: {
+        cc: {
+          dd: 1,
         },
       },
-      ee: 'ee',
     },
-  }
+    ee: 'ee',
+  },
+}
+
+test('struct clone child', t => {
   const struct = Struct(data)
   const { dd } = struct.deep.child.bb.cc
   const child = Struct.clone(struct.deep.child)
@@ -211,6 +212,26 @@ test('struct clone child', t => {
     Struct.debug(child, true)
     throw e
   }
+  t.false(child.bb === struct.deep.child.bb)
+  t.false(child.bb.cc === struct.deep.child.bb.cc)
+  t.is(child.bb.cc.dd, 2)
+  t.is(struct.deep.child.bb.cc.dd, 1)
+  t.is(dd, 1)
+})
+
+test('Struct.clone', t => {
+  const struct = Struct(data)
+  const { dd } = struct.deep.child.bb.cc
+  const child = Struct.clone(struct.deep.child, child => {
+    Struct.debug(child, true)
+    // t.true(child.bb === struct.deep.child.bb) wrong set context order, then you are editint struct.deep.child
+    try {
+      child.bb.cc.dd = 2
+    } catch (e) {
+      Struct.debug(child, true)
+      throw e
+    }
+  })
   t.false(child.bb === struct.deep.child.bb)
   t.false(child.bb.cc === struct.deep.child.bb.cc)
   t.is(child.bb.cc.dd, 2)
@@ -230,6 +251,17 @@ test('struct right mutate', t => {
   t.is(struct1.category.name, 'New Title')
 })
 
+test('struct.clone', t => {
+  const struct = Struct(book)
+  const struct1 = Struct.clone(struct, struct => {
+    const { category } = struct
+    category.name = 'New Title 2'
+  })
+  t.is(struct.category.name, 'novel')
+  struct.category.name = 'New Title'
+  t.is(struct.category.name, 'New Title')
+  t.is(struct1.category.name, 'New Title 2')
+})
 // // This will cause modify recently called struct without error, can't fix in runtime.
 // test('struct wrong mutate', t => {
 //   const struct = Struct(book)

@@ -29,4 +29,8 @@ export type State<T=any> = {
 export type Context = {
   cache: WeakMap<any, Proxy<any>>
 }
-export type StructT<T> = T
+
+// Cannot Struct<T> = T & Clone<T>, because autocomplete is broken
+export type Clone<T> = {
+  clone: (fn: (struct: T) => any) => (T & Clone<T>);
+}

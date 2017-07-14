@@ -4,9 +4,7 @@ import {
   getType, symbol, STRUCT_ROOT, STRUCT_STATE, STRUCT_CONTEXT,
   STRUCT_CHILD_RAW, STRUCT_CHAIN, primitiveTypes
 } from './common'
-import type { State, OnChange, Context, StructT } from './common'
-
-export type { StructT }
+import type { State, OnChange, Context, Clone } from './common'
 
 // Pre define property for ie polyfill
 function preDefine(obj: Object, key: string, val: any) {
@@ -51,6 +49,11 @@ function makeHandler({
         return root ? true : void 0
       } else if (property === STRUCT_CONTEXT) {
         return ctx
+      } else if (root && property === 'clone') {
+        return function (fn: (val: any) => any) {
+          const cloned = Struct.clone(this)
+          return fn(cloned) || cloned
+        }
       }
 
       if (property === STRUCT_CHILD_RAW) {
@@ -99,10 +102,10 @@ function makeHandler({
   }
 }
 
-function _Struct<T>(
+function _Struct<T: Object>(
   state: State<T>,
   ctx?: Context = {cache: new WeakMap()}
-): T {
+): T & Clone<T> {
   if (!state.data) {
     return state.data
   }
@@ -111,9 +114,9 @@ function _Struct<T>(
   return ret
 }
 
-export default function Struct<T>(data: T, onChange?: OnChange): StructT<T> {
+export default function Struct<T: {}>(data: T, onChange?: OnChange): T & Clone<T> {
   if (Struct.isStruct(data)) {
-    return Struct.clone(data)
+    return Struct.clone((data: any))
   }
   return _Struct({
     data: {...(data: any)},
@@ -121,23 +124,34 @@ export default function Struct<T>(data: T, onChange?: OnChange): StructT<T> {
   })
 }
 
-Struct.clone = function<T> (_struct: StructT<T> | T, onChange?: OnChange): StructT<T> {
-  const struct: any = _struct
+Struct.clone = function<T: Object> (
+  struct: T,
+  updater?: (cloned: T) => any,
+  { onChange }: { onChange?: OnChange } = {}
+): T & Clone<T> {
+  if (updater) {
+    let newStruct = Struct.clone(struct, void 0, {onChange})
+    newStruct = updater(newStruct) || newStruct
+    return (newStruct: any)
+  }
+
   const state = struct[STRUCT_STATE]
   const isRoot = struct[STRUCT_ROOT]
   const ctx = struct[STRUCT_CONTEXT]
   if (isRoot && state && ctx) {
-    return _Struct({
+    const ret: any = _Struct({
       data: {...state.data},
       onChange,
     }, ctx)
+    return ret
   }
   const raw = struct[STRUCT_CHILD_RAW]
   if (!isRoot && raw && ctx && typeof raw === 'object') {
-    return _Struct({
+    const ret: any = _Struct({
       data: {...raw},
       onChange,
     }, ctx)
+    return ret
   }
   console.error(struct, state, isRoot, ctx)
   throw new TypeError('Cannot clone a non-struct!')

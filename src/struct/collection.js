@@ -1,4 +1,3 @@
-// @flow
 import { updateIn, setIn } from 'timm'
 function symbol(label) {
   return (typeof Symbol === 'function') ? Symbol(label) : label
@@ -42,7 +41,9 @@ class MutableMap<K, V> extends Map<K, V> {
     const Struct = getStruct()
     const structValue: any = this.get(key)
     if (structValue) {
-      this.set(key, Struct.clone(structValue, this.__onChange))
+      this.set(key, (Struct.clone(structValue, void 0, {
+        onChange: this.__onChange(),
+      }): any))
     } else {
       console.log('Set unknow key', key, structValue)
     }

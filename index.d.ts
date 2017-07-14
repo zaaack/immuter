@@ -29,10 +29,14 @@ declare module 'immuter' {
     Struct: StringConstructor;
   }
 
+  type StructT<T> = T & {
+    clone(fn: (struct: StructT<T>) => (StructT<T> | void)): StructT<T>;
+  }
+
   export interface StructConstructor {
-    <T>(obj: T): T;
+    <T>(obj: T): StructT<T>;
     isStruct<T>(obj: T): boolean;
-    clone<T>(obj: T): T;
+    clone<T>(obj: T, fn: (struct: StructT<T>) => (StructT<T> | void)): StructT<T>;
     debug(obj: any, json?: boolean, out?: boolean);
   }
 
