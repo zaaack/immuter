@@ -1,5 +1,5 @@
 // @flow
-import { getIn, setIn } from 'timm'
+import { getIn as _getIn, setIn as _setIn } from 'timm'
 import {
   getType, symbol, STRUCT_ROOT, STRUCT_STATE, STRUCT_CONTEXT,
   STRUCT_CHILD_RAW, STRUCT_CHAIN, primitiveTypes
@@ -60,11 +60,11 @@ function makeHandler({
         // if (!root) {
         //   console.log('get child raw value:', state.data, chain)
         // }
-        return !root ? getIn(state.data, chain) : undefined
+        return !root ? _getIn(state.data, chain) : undefined
       }
 
       const _chain = chain.concat(property)
-      let val = getIn(state.data, _chain)
+      let val = _getIn(state.data, _chain)
       const valType = getType(val)
       // console.log('val before scalar', _chain, val)
       if (valType in primitiveTypes) {
@@ -95,7 +95,7 @@ function makeHandler({
         return true
       }
       const _chain = chain.concat(property)
-      state.data = setIn(state.data, _chain, value)
+      state.data = _setIn(state.data, _chain, value)
       state.onChange && state.onChange(_chain, value)
       return true
     },
@@ -200,8 +200,13 @@ function chainCollector<T: Object>(data: T): T {
   return proxy
 }
 
-export function setT<T: Object, F>(data: T, keyPath: (key: T) => F): (val: F) => T {
-  const collector: any = keyPath(chainCollector(data))
-  const path: Array<string | number> = (chainMap.get(collector): any)
-  return (val: F) => setIn(data, path, val)
+export function setIn<T: Object, F>(data: T, keyPath: Array<string | number> | (key: T) => F): (val: F) => T {
+  let path: Array<string | number>
+  if (typeof keyPath === 'function') {
+    const collector: any = keyPath(chainCollector(data))
+    path = (chainMap.get(collector): any)
+  } else {
+    path = keyPath
+  }
+  return (val: F) => _setIn(data, path, val)
 }

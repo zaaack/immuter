@@ -36,7 +36,7 @@ declare module 'immuter' {
   export interface StructConstructor {
     <T>(obj: T): StructT<T>;
     isStruct<T>(obj: T): boolean;
-    clone<T>(obj: T, fn: (struct: StructT<T>) => (StructT<T> | void)): StructT<T>;
+    clone<T>(obj: T, fn?: (struct: StructT<T>) => (StructT<T> | void)): StructT<T>;
     debug(obj: any, json?: boolean, out?: boolean);
   }
 

@@ -9,7 +9,7 @@ let struct = Struct({
   tags: ['novel', 'magic'],
 })
 
-struct = Struct.clone(struct, s => {
-  s.author === 'J. k. rowling' // true
-  s.title.en = 'New Title'
-}) // Clone struct, it will only change modified part to optimize performance.
+struct = struct.clone(s => {
+  s.author = 'New Author'
+  s.title.en = 'New Title!'
+})

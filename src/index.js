@@ -4,7 +4,7 @@ import {
   get as _get, set as _set, isPlainObject, toPairs as _toPairs,
 defaults as withDefaults
 } from 'lodash'
-import Struct, { setT } from './struct'
+import Struct, { setIn } from './struct'
 
 export type Path = string | Array<string>
 export type GetPath = Path | { [string]: Path }
@@ -148,6 +148,6 @@ function bindComp<T: Object>(
     return comp
   }
 }
-const immuter = { bindObj, bindComp, get, set, update, del, delete: del, Struct, setT }
-export { bindObj, bindComp, get, set, update, del, Struct, setT }
+const immuter = { bindObj, bindComp, get, set, update, del, delete: del, Struct, setIn }
+export { bindObj, bindComp, get, set, update, del, Struct, setIn }
 export default immuter
