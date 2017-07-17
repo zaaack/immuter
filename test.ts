@@ -1,4 +1,4 @@
-import { Struct } from 'immuter'
+import { Struct, setIn } from 'immuter'
 
 let struct = Struct({
   title: {
@@ -13,3 +13,5 @@ struct = struct.clone(s => {
   s.author = 'New Author'
   s.title.en = 'New Title!'
 })
+
+struct = setIn(struct, _ => _.title.zh)("")

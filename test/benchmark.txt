@@ -1,76 +1,76 @@
 Start Suit: Get one key
-Struct x 348,315 ops/sec ±8.64% (67 runs sampled)
-Immuter x 3,284,991 ops/sec ±15.61% (45 runs sampled)
-Immutable x 24,372,862 ops/sec ±9.89% (69 runs sampled)
-SeamlessImmutable x 23,383,518 ops/sec ±10.82% (50 runs sampled)
-timm x 20,814,085 ops/sec ±12.07% (61 runs sampled)
-vanilla x 43,917,559 ops/sec ±9.95% (61 runs sampled)
+Struct x 510,864 ops/sec ±3.45% (82 runs sampled)
+Immuter x 7,886,642 ops/sec ±3.46% (83 runs sampled)
+Immutable x 23,091,406 ops/sec ±12.47% (58 runs sampled)
+SeamlessImmutable x 37,971,610 ops/sec ±5.39% (75 runs sampled)
+timm x 21,164,318 ops/sec ±2.22% (84 runs sampled)
+vanilla x 67,441,387 ops/sec ±1.68% (83 runs sampled)
 Fastest is vanilla
 
 
 Start Suit: Get 2 key
-Struct x 121,431 ops/sec ±16.65% (58 runs sampled)
-Immuter x 848,351 ops/sec ±13.09% (44 runs sampled)
-Immutable x 4,081,370 ops/sec ±24.37% (65 runs sampled)
-SeamlessImmutable x 12,613,647 ops/sec ±5.08% (78 runs sampled)
-timm x 14,092,524 ops/sec ±5.15% (74 runs sampled)
-vanilla x 61,326,501 ops/sec ±2.59% (80 runs sampled)
+Struct x 235,462 ops/sec ±6.77% (79 runs sampled)
+Immuter x 1,493,295 ops/sec ±2.35% (86 runs sampled)
+Immutable x 5,475,782 ops/sec ±22.52% (62 runs sampled)
+SeamlessImmutable x 10,743,856 ops/sec ±16.26% (64 runs sampled)
+timm x 15,623,409 ops/sec ±3.04% (82 runs sampled)
+vanilla x 68,989,446 ops/sec ±1.32% (88 runs sampled)
 Fastest is vanilla
 
 
 Start Suit: Get 5 key
-Struct x 51,704 ops/sec ±8.57% (61 runs sampled)
-Immuter x 1,277,086 ops/sec ±12.56% (59 runs sampled)
-Immutable x 2,817,885 ops/sec ±10.11% (58 runs sampled)
-SeamlessImmutable x 18,129,617 ops/sec ±3.02% (81 runs sampled)
-timm x 8,246,669 ops/sec ±4.52% (78 runs sampled)
-vanilla x 49,796,035 ops/sec ±4.36% (77 runs sampled)
+Struct x 102,737 ops/sec ±2.18% (87 runs sampled)
+Immuter x 1,636,903 ops/sec ±1.40% (88 runs sampled)
+Immutable x 4,485,537 ops/sec ±4.02% (83 runs sampled)
+SeamlessImmutable x 20,672,995 ops/sec ±2.79% (88 runs sampled)
+timm x 8,606,426 ops/sec ±1.55% (89 runs sampled)
+vanilla x 60,741,043 ops/sec ±0.93% (89 runs sampled)
 Fastest is vanilla
 
 
 Start Suit: Get 10 key
-Struct x 13,764 ops/sec ±27.54% (41 runs sampled)
-Immuter x 1,766,974 ops/sec ±19.33% (63 runs sampled)
-Immutable x 962,631 ops/sec ±32.70% (64 runs sampled)
-SeamlessImmutable x 3,787,602 ops/sec ±5.23% (81 runs sampled)
-timm x 4,681,652 ops/sec ±3.45% (83 runs sampled)
-vanilla x 39,862,301 ops/sec ±7.61% (76 runs sampled)
+Struct x 48,649 ops/sec ±3.63% (85 runs sampled)
+Immuter x 1,641,669 ops/sec ±4.74% (80 runs sampled)
+Immutable x 1,816,343 ops/sec ±4.91% (84 runs sampled)
+SeamlessImmutable x 4,177,991 ops/sec ±0.95% (89 runs sampled)
+timm x 4,290,685 ops/sec ±1.37% (86 runs sampled)
+vanilla x 43,602,409 ops/sec ±1.79% (85 runs sampled)
 Fastest is vanilla
 
 
 Start Suit: Set One key
-Struct x 333,093 ops/sec ±21.44% (78 runs sampled)
-Immuter x 489,802 ops/sec ±3.34% (83 runs sampled)
-Immutable x 2,045,225 ops/sec ±4.50% (75 runs sampled)
-SeamlessImmutable x 120,964 ops/sec ±12.17% (64 runs sampled)
-timm x 1,859,887 ops/sec ±9.51% (74 runs sampled)
-Fastest is Immutable
+Struct x 1,424,697 ops/sec ±1.62% (86 runs sampled)
+Immuter x 575,522 ops/sec ±1.29% (90 runs sampled)
+Immutable x 1,976,813 ops/sec ±6.57% (63 runs sampled)
+SeamlessImmutable x 104,308 ops/sec ±10.94% (63 runs sampled)
+timm x 2,097,043 ops/sec ±2.90% (87 runs sampled)
+Fastest is timm,Immutable
 
 
 Start Suit: Set 2 key
-Struct x 63,138 ops/sec ±4.70% (61 runs sampled)
-Immuter x 143,120 ops/sec ±15.53% (52 runs sampled)
-Immutable x 943,726 ops/sec ±5.70% (75 runs sampled)
-SeamlessImmutable x 45,131 ops/sec ±12.80% (68 runs sampled)
-timm x 862,898 ops/sec ±6.63% (66 runs sampled)
-Fastest is Immutable
+Struct x 90,505 ops/sec ±9.01% (58 runs sampled)
+Immuter x 201,905 ops/sec ±7.21% (74 runs sampled)
+Immutable x 917,625 ops/sec ±4.83% (68 runs sampled)
+SeamlessImmutable x 47,419 ops/sec ±3.32% (80 runs sampled)
+timm x 1,379,971 ops/sec ±2.46% (82 runs sampled)
+Fastest is timm
 
 
 Start Suit: Set 5 key
-Struct x 18,218 ops/sec ±7.68% (57 runs sampled)
-Immuter x 86,085 ops/sec ±14.44% (52 runs sampled)
-Immutable x 315,139 ops/sec ±11.97% (48 runs sampled)
-SeamlessImmutable x 17,517 ops/sec ±13.15% (53 runs sampled)
-timm x 452,663 ops/sec ±6.59% (65 runs sampled)
-Fastest is timm
+Struct x 29,379 ops/sec ±3.86% (60 runs sampled)
+Immuter x 97,072 ops/sec ±21.66% (60 runs sampled)
+Immutable x 509,694 ops/sec ±18.38% (65 runs sampled)
+SeamlessImmutable x 21,023 ops/sec ±6.76% (73 runs sampled)
+timm x 630,747 ops/sec ±2.96% (81 runs sampled)
+Fastest is timm,Immutable
 
 
 Start Suit: Set 10 key
-Struct x 7,244 ops/sec ±9.71% (45 runs sampled)
-Immuter x 57,476 ops/sec ±14.90% (55 runs sampled)
-Immutable x 248,587 ops/sec ±9.67% (60 runs sampled)
-SeamlessImmutable x 13,381 ops/sec ±7.92% (64 runs sampled)
-timm x 276,109 ops/sec ±9.18% (63 runs sampled)
-Fastest is timm
+Struct x 41,620 ops/sec ±5.12% (78 runs sampled)
+Immuter x 92,101 ops/sec ±2.89% (81 runs sampled)
+Immutable x 396,960 ops/sec ±5.49% (78 runs sampled)
+SeamlessImmutable x 15,349 ops/sec ±4.48% (81 runs sampled)
+timm x 406,940 ops/sec ±2.09% (87 runs sampled)
+Fastest is timm,Immutable
 
 

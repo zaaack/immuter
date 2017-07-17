@@ -26,12 +26,14 @@ declare module 'immuter' {
     set<T>(obj: T, path: SetPath, value?: any): T;
     update<T>(obj: T, path: SetPath, fn?: Updater): T;
     del<T>(obj: T, path: DelPath): T;
-    Struct: StringConstructor;
+    Struct: StructConstructor;
   }
 
   type StructT<T> = T & {
     clone(fn: (struct: StructT<T>) => (StructT<T> | void)): StructT<T>;
   }
+
+  export function setIn<T extends Object, F>(data: T, keyPath: Array<string | number> | ((key: T) => F)): (val: F) => T;
 
   export interface StructConstructor {
     <T>(obj: T): StructT<T>;

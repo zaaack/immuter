@@ -6,10 +6,11 @@
   "module": "es/index.js",
   "jsnext:main": "es/index.js",
   "scripts": {
-    "build": "run-p build:lib build:es 'build:flow -- lib' 'build:flow -- es' && git add -A",
+    "build": "npm run clean && run-p build:lib build:es 'build:flow -- lib' 'build:flow -- es' && git add -A",
     "build:lib": "cross-env NODE_ENV=production BABEL_ENV=normal babel -d ./lib -s false -D ./src",
     "build:es": "cross-env NODE_ENV=production BABEL_ENV=es babel -d ./es -s false -D ./src",
     "build:flow": "flow-copy-source -v -i '{**/test/*.js,**/*.test.js}' src",
+    "clean": "rm -r ./es && rm -r ./lib",
     "flow": "cross-env NODE_ENV=production BABEL_ENV=normal flow check",
     "lint": "cross-env NODE_ENV=production BABEL_ENV=normal eslint src",
     "test": "cross-env NODE_ENV=development BABEL_ENV=normal ava --serial",
