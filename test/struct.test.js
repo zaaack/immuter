@@ -1,9 +1,9 @@
-// @flow
-import test from 'ava'
 import { Struct } from '../src'
 import cloneDeep from 'lodash/cloneDeep'
-import merge from 'lodash/merge'
 import isEqual from 'lodash/isEqual'
+import merge from 'lodash/merge'
+// @flow
+import test from 'ava'
 
 let plain
 let book
@@ -261,6 +261,18 @@ test('struct.clone', t => {
   struct.category.name = 'New Title'
   t.is(struct.category.name, 'New Title')
   t.is(struct1.category.name, 'New Title 2')
+})
+
+test('struct.clone', t => {
+  const struct = Struct({
+    list: [{a: 1, b: 1}, {a: 2, b: 2}]
+  })
+  const struct1 = Struct.clone(struct, s => {
+    s.list = s.list.map(l => l.a === 1 ? {a: 1, b: 2} : l)
+  })
+  console.log('struct1', struct1)
+  Struct.debug(struct1, true)
+  t.is(struct1.list[0].b, 2)
 })
 // // This will cause modify recently called struct without error, can't fix in runtime.
 // test('struct wrong mutate', t => {

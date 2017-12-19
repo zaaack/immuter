@@ -16,3 +16,12 @@ const struct = Struct({
 const newStruct = Struct.clone(struct, (s) => {
   s.title.en = 'aaa'
 })
+// @flow
+
+function keymirror<T>(obj: T): {[key: $Keys<T>]: $Keys<T>} {
+  return (null: any)
+}
+
+const a = keymirror({
+  aa: null
+})
